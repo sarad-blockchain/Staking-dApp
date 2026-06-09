@@ -5,7 +5,7 @@
 ![Solidity](https://img.shields.io/badge/Solidity-^0.8.35-red)
 ![Angular](https://img.shields.io/badge/Angular-18.2-red)
 
-## 🌟 Project Overview
+## Project Overview
 
 **SkyStake** is a decentralized staking protocol that enables users to deposit ERC-20 tokens and earn fixed rewards after completing a predetermined staking period. Built on the Ethereum blockchain with a modern Angular frontend, SkyStake provides a secure, intuitive, and transparent way to participate in token staking.
 
@@ -15,16 +15,16 @@ SkyStake simplifies cryptocurrency staking by offering a **fixed-amount, fixed-p
 
 ### Key Benefits
 
-✅ **Predictable Rewards** — Know exactly how much you'll earn before you stake  
-✅ **Simple & Transparent** — No hidden fees or complex mechanisms  
-✅ **Non-Custodial** — Your tokens are secured by smart contracts, not intermediaries  
-✅ **User-Friendly Interface** — Modern Angular dashboard with real-time status updates  
-✅ **Ethereum-Native** — Runs on Ethereum Sepolia testnet with full MetaMask integration  
-✅ **Auditable** — Open-source contracts built with OpenZeppelin standards  
+**Predictable Rewards** — Know exactly how much you'll earn before you stake  
+**Simple & Transparent** — No hidden fees or complex mechanisms  
+**Non-Custodial** — Your tokens are secured by smart contracts, not intermediaries  
+**User-Friendly Interface** — Modern Angular dashboard with real-time status updates  
+**Ethereum-Native** — Runs on Ethereum Sepolia testnet with full MetaMask integration  
+**Auditable** — Open-source contracts built with OpenZeppelin standards  
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 SkyStake is built as a monorepo containing two primary packages:
 
@@ -75,7 +75,7 @@ staking-project/
 
 ---
 
-## 🔄 How It Works
+## How It Works
 
 ### User Journey
 
@@ -133,7 +133,7 @@ Time: 24h + 1 second
 
 ---
 
-## 📋 Smart Contract Details
+## Smart Contract Details
 
 ### Staking Contract (`Stakingdapp.sol`)
 
@@ -186,7 +186,7 @@ Simple ERC-20 implementation with public mint capability for testing.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -242,7 +242,7 @@ The frontend will be available at `http://localhost:4200`
 
 ---
 
-## 🧪 Testing Smart Contracts
+## Testing Smart Contracts
 
 Run the complete test suite with Foundry:
 
@@ -262,16 +262,16 @@ forge coverage
 ### Test Coverage
 
 The test suite validates:
-- ✅ Token deposit mechanisms
-- ✅ Reward calculation logic
-- ✅ Time-lock enforcement
-- ✅ Access control (onlyOwner)
-- ✅ Token transfer safety
-- ✅ Edge cases and reverts
+- Token deposit mechanisms
+- Reward calculation logic
+- Time-lock enforcement
+- Access control (onlyOwner)
+- Token transfer safety
+- Edge cases and reverts
 
 ---
 
-## 📡 Deployment
+## Deployment
 
 ### Deploy to Sepolia Testnet
 
@@ -327,7 +327,7 @@ vercel deploy
 
 ---
 
-## 🔐 Security Considerations
+## Security Considerations
 
 ### Smart Contract Security
 
@@ -338,11 +338,11 @@ vercel deploy
 
 ### Best Practices Implemented
 
-✅ NatSpec comments for all functions  
-✅ Clear error messages in require statements  
-✅ Safe ERC-20 transfer patterns  
-✅ Timestamp-based time-lock mechanism  
-✅ Separate token and staking contracts  
+NatSpec comments for all functions  
+Clear error messages in require statements  
+Safe ERC-20 transfer patterns  
+Timestamp-based time-lock mechanism  
+Separate token and staking contracts  
 
 ### Audit Recommendations
 
@@ -354,7 +354,7 @@ For production deployment, we recommend:
 
 ---
 
-## 📊 Frontend Features
+## Frontend Features
 
 ### Dashboard Components
 
@@ -379,7 +379,7 @@ For production deployment, we recommend:
 
 ---
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 
@@ -440,7 +440,7 @@ npm test                       # Run tests
 
 ---
 
-## 📝 Configuration
+## Configuration
 
 ### Smart Contract Parameters
 
@@ -470,7 +470,7 @@ const TOKEN_ADDR   = '0x...'   // Your StakingToken contract
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please follow these steps:
 
@@ -489,7 +489,7 @@ We welcome contributions! Please follow these steps:
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 - **[Smart Contract ABI](./packages/contracts/out/Stakingdapp.json)** — Contract interface specifications
 - **[Foundry Docs](https://book.getfoundry.sh/)** — Smart contract development guide
@@ -498,7 +498,7 @@ We welcome contributions! Please follow these steps:
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### "Contract address not configured"
 
