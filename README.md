@@ -522,7 +522,7 @@ We welcome contributions! Please follow these steps:
 ---
 
 
-**Built with ❤️ by the SkyStake team**
+**Built with by Sara Deleyto**
 
 *Last Updated: June 2026*  
 *Version: 1.0.0*
