@@ -521,39 +521,6 @@ We welcome contributions! Please follow these steps:
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
----
-
-## 👥 Team & Contact
-
-- **Repository:** [github.com/yourusername/staking-dapp](https://github.com/yourusername/staking-dapp)
-- **Issues:** [GitHub Issues](https://github.com/yourusername/staking-dapp/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/yourusername/staking-dapp/discussions)
-
----
-
-## 🎯 Roadmap
-
-**v1.0** ✅ Fixed-period staking with fixed rewards  
-**v2.0** 🔄 Variable staking periods & APY tiers  
-**v3.0** 🔄 Staking pool aggregation  
-**v4.0** 🔄 Governance token integration  
-
----
-
-## 📞 Support
-
-For questions or issues:
-
-1. Check the [Troubleshooting](#-troubleshooting) section
-2. Review [Issues](https://github.com/yourusername/staking-dapp/issues)
-3. Open a new [Discussion](https://github.com/yourusername/staking-dapp/discussions)
-4. Review [Technical Documentation](#-smart-contract-details)
-
----
 
 **Built with ❤️ by the SkyStake team**
 
