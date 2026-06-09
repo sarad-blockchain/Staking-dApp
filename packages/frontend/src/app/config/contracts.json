@@ -1,0 +1,11 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "stakingAddress": "0xF2D35C45f116D8B27e8E6b981fd48f0950a4BC94",
+  "tokenAddress": "0x84D7b0bf91fA13B78fE7201B65Cd67Fbc76c011E",
+  "explorer": {
+    "baseUrl": "https://sepolia.etherscan.io",
+    "stakingUrl": "https://sepolia.etherscan.io/address/0xF2D35C45f116D8B27e8E6b981fd48f0950a4BC94",
+    "tokenUrl": "https://sepolia.etherscan.io/address/0x84D7b0bf91fA13B78fE7201B65Cd67Fbc76c011E"
+  }
+}

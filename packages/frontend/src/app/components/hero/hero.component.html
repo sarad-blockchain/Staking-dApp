@@ -1,0 +1,151 @@
+<section class="hero-section" id="hero">
+
+  <!-- Sky gradient background -->
+  <div class="sky-bg"></div>
+
+  <!-- Canvas: coins + clouds -->
+  <canvas #coinCanvas class="coin-canvas"></canvas>
+
+  <!-- Content grid -->
+  <div class="hero-inner">
+
+    <!-- LEFT -->
+    <div class="hero-left">
+      <div class="hero-badge">
+        Simple staking. Real rewards.
+      </div>
+
+      <h1 class="hero-h1">
+        Stake tokens.<br>
+        Grow your<br>
+        <span class="h1-accent">rewards.</span>
+      </h1>
+
+      <p class="hero-sub">
+        Secure, transparent staking designed<br>
+        to generate real on-chain returns.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-cta" (click)="scrollToDash()">
+          Start staking
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="btn-ghost" (click)="scrollToDash()">
+          See how it works
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+            <polygon points="4,2 12,7 4,12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT CARD -->
+    <div class="hero-right">
+      <div class="dash-card">
+        <div class="dc-head">
+          <div>
+            <div class="dc-title">Your Staking</div>
+            <div class="dc-sub">Summary of your positions</div>
+          </div>
+          <div class="dc-head-actions">
+            <button class="dc-icon-btn" title="View">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/>
+              </svg>
+            </button>
+            <button class="dc-icon-btn" title="More">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="dc-grid">
+          <div class="dc-stat">
+            <div class="dc-stat-label">Total Staked</div>
+            <div class="dc-stat-row">
+              <span class="dc-stat-val">{{ staking.userData()?.stakedFmt ?? '—' }}</span>
+              <span class="dc-badge">{{ staking.params()?.sym || 'STK' }}</span>
+            </div>
+            <div class="dc-stat-usd">Balance: {{ staking.userData()?.tokenBalFmt ?? '—' }} tokens</div>
+          </div>
+          <div class="dc-stat">
+            <div class="dc-stat-label">Reward / Period</div>
+            <div class="dc-stat-row">
+              <span class="dc-stat-val green">{{ staking.params()?.rewardFmt ?? '—' }}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="#22C080"><polygon points="6,1 11,11 1,11"/></svg>
+            </div>
+            <div class="dc-stat-usd">{{ staking.params()?.periodHours ?? '—' }}h lock period</div>
+            <div class="dc-est" *ngIf="staking.params()">
+              +{{ staking.params()!.rewardFmt }} ETH / period
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-stake-now" (click)="scrollToDash()">
+          Stake Now
+        </button>
+
+        <div class="dc-divider"></div>
+
+        <div class="dc-rewards-row">
+          <div>
+            <div class="dc-stat-label">Accumulated rewards</div>
+            <div class="dc-stat-row" style="gap:8px">
+              <span class="dc-rewards-val">{{ staking.userData()?.stakedFmt ?? '—' }}</span>
+              <span class="dc-badge">{{ staking.params()?.sym || 'STK' }}</span>
+            </div>
+            <div class="dc-stat-usd">Time remaining: {{ staking.userData()?.timeLeft ?? '—' }}</div>
+          </div>
+          <button class="btn-reclaim"
+                  [disabled]="!staking.userData()?.claimable || staking.loading() === 'claim'">
+            Claim
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Stats band — sits at the bottom of the hero, blue integrated -->
+  <div class="hero-stats-band">
+    <div class="hero-stats-inner">
+      <div class="hs-item">
+        <svg class="hs-icon" viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="hs-label">Total Staked</div>
+          <div class="hs-val">{{ staking.params()?.amountFmt || '$24.8M' }} {{ staking.params()?.sym || '' }}</div>
+        </div>
+      </div>
+      <div class="hs-item">
+        <svg class="hs-icon" viewBox="0 0 24 24" fill="none">
+          <polyline points="2,18 8,12 13,16 22,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="hs-label">Average APY</div>
+          <div class="hs-val">18.7%</div>
+        </div>
+      </div>
+      <div class="hs-item">
+        <svg class="hs-icon" viewBox="0 0 24 24" fill="none">
+          <circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M3 20c0-3.3 2.7-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="16" cy="9" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M13 20c0-2.8 2.2-5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="hs-label">Stakers</div>
+          <div class="hs-val">12,842</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

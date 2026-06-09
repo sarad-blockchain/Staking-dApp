@@ -1,0 +1,236 @@
+# SkyStake Project - .gitignore
+# Covers Solidity contracts (Foundry), Angular frontend, and general development
+
+# ==================== ENVIRONMENT VARIABLES ====================
+.env
+.env.local
+.env.*.local
+.env.example
+
+# ==================== FOUNDRY / SOLIDITY ====================
+# Foundry cache and build artifacts
+cache/
+out/
+broadcast/
+
+# Foundry test results
+.gas-snapshot
+
+# Solidity compiler cache
+*.sol.json
+*.sol.abi.json
+
+# ==================== NODE MODULES ====================
+node_modules/
+npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ==================== ANGULAR / TYPESCRIPT ====================
+# Angular build output
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Angular dependencies
+packages/frontend/node_modules
+packages/contracts/node_modules
+
+# Test coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# IDEs cache
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# ==================== IDE / EDITOR FILES ====================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+
+.DS_Store
+Thumbs.db
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ==================== OS SPECIFIC ====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.AppleDouble
+.AppleDB
+.LSOverride
+
+# ==================== LOCAL TESTING & ARTIFACTS ====================
+# Ganache / Anvil local blockchain
+ganache-cli.db
+.ganache
+
+# Hardhat / Foundry local node data
+.hardhat/
+hardhat-artifacts/
+
+# Solidity documentation
+docs/api/
+
+# ==================== TEMPORARY FILES ====================
+*.tmp
+*.temp
+*.bak
+*.log
+*.orig
+
+# ==================== PACKAGE MANAGERS ====================
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ==================== BUILD & DEPLOY ARTIFACTS ====================
+build/
+dist/
+*.wasm
+*.wasm.js
+
+# ==================== PRIVATE KEYS / SECRETS ====================
+# NEVER commit private keys!
+.privatekey
+*.pem
+*.key
+*.asc
+keystore/
+secrets/
+
+# ==================== FOUNDRY SPECIFIC ====================
+# Foundry library remappings
+remappings.txt
+foundry.lock
+
+# ==================== FRONTEND SPECIFIC ====================
+# Angular CLI cache
+.angular/
+.angular/cache/
+
+# Angular production build
+dist/
+*.js.map
+*.css.map
+
+# Angular test coverage
+karma.conf.js
+
+# ==================== DOCUMENTATION GENERATED ====================
+docs/_build/
+docs/.doctrees/
+site/
+
+# ==================== MISCELLANEOUS ====================
+.firebaserc
+.firebase/
+.netlify
+.vercel
+.env.local
+.vercel.json
+
+# IDE specific
+*.iml
+*.iws
+*.ipr
+
+# MacOS workspace
+.workspace
+
+# Auto-generated API documentation
+api-docs/
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# ==================== GITHUB ====================
+# GitHub-related files
+.git
+.gitkeep
+
+# ==================== MONOREPO ====================
+# Workspace-specific
+lerna-debug.log*
+.pnp
+.pnp.js
+
+# hoisting
+.hoist
+
+# Babel cache
+.babel.json
+babel-cache/
+
+# ==================== SYSTEM FILES ====================
+# MacOS Finder metadata
+.localized
+.com.apple.timemachine.donotpresent
+
+# Windows system files
+System32/
+SysWOW64/
+
+# ==================== VSCODE EXTENSIONS ====================
+# Local extensions
+.vscode/extensions/
+
+# ==================== TYPESCRIPT ====================
+*.tsbuildinfo
+tsconfig.json.backup
+
+# ==================== CUSTOM ADDITIONS ====================
+# Add project-specific ignores below:
+
+# Staking DApp specific
+*.deployed
+deployed-addresses.json
+test-reports/
+audit-reports/

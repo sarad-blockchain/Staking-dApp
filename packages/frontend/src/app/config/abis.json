@@ -1,0 +1,19 @@
+{
+  "staking": [
+    "function stakingPeriod() view returns (uint256)",
+    "function fixedStakingAmount() view returns (uint256)",
+    "function rewardPerPeriod() view returns (uint256)",
+    "function userBalances(address) view returns (uint256)",
+    "function userStakingTimestamps(address) view returns (uint256)",
+    "function depositTokens(uint256) external",
+    "function withdrawTokens() external",
+    "function claimReward() external"
+  ],
+  "token": [
+    "function balanceOf(address) view returns (uint256)",
+    "function allowance(address,address) view returns (uint256)",
+    "function approve(address,uint256) external returns (bool)",
+    "function decimals() view returns (uint8)",
+    "function symbol() view returns (string)"
+  ]
+}

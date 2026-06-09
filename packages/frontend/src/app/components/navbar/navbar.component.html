@@ -1,0 +1,46 @@
+<nav class="navbar">
+  <div class="nav-inner">
+
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="16" fill="url(#lg1)"/>
+          <path d="M16 7 L22 13 L16 11 L10 13 Z" fill="white" opacity="0.9"/>
+          <path d="M10 13 L16 11 L16 25 L10 21 Z" fill="white" opacity="0.6"/>
+          <path d="M22 13 L16 11 L16 25 L22 21 Z" fill="white" opacity="0.8"/>
+          <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32">
+              <stop stop-color="#7080FF"/>
+              <stop offset="1" stop-color="#4050D0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="logo-name">Sky<span>Stake</span></span>
+    </div>
+
+    <ul class="nav-links">
+      <li><a (click)="scrollTo('hero')" [class.active]="active==='hero'">Home</a></li>
+      <li><a (click)="scrollTo('staking')" [class.active]="active==='staking'">Staking</a></li>
+      <li><a (click)="scrollTo('rewards')" [class.active]="active==='rewards'">Rewards</a></li>
+      <li><a (click)="scrollTo('how-it-works')" [class.active]="active==='how-it-works'">How it works</a></li>
+      <li><a (click)="scrollTo('faq')" [class.active]="active==='faq'">FAQ</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="btn-wallet"
+              [class.connected]="wallet.connected()"
+              (click)="connect()"
+              [disabled]="busy">
+        <span *ngIf="busy" class="spinner"></span>
+        {{ wallet.connected() ? wallet.short(wallet.address()) : 'Connect Wallet' }}
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="toast-wrap" *ngIf="toast">
+  <div class="toast" [class.err]="toast.startsWith('error:')">
+    {{ toast.startsWith('error:') ? toast.slice(6) : toast }}
+  </div>
+</div>

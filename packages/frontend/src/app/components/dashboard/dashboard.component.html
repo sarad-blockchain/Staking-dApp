@@ -1,0 +1,485 @@
+<!-- ══════════════════════════════════════════════ -->
+<!-- STAKING SECTION                               -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="dashboard" id="staking">
+  <div class="dash-inner">
+
+    <div class="dash-header">
+      <div>
+        <div class="section-tag">Staking</div>
+        <h2 class="dash-title">Manage Your Position</h2>
+        <p class="dash-sub">Stake tokens and earn ETH rewards every period</p>
+      </div>
+      <button class="btn-refresh" (click)="refresh()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15A9 9 0 1 1 5.64 5.64L23 10"/>
+        </svg>
+        Refresh
+      </button>
+    </div>
+
+    <div class="dash-grid">
+
+      <!-- ── LEFT PANEL ── -->
+      <div class="panel">
+        <div class="panel-label">Stake / Withdraw</div>
+
+        <div class="err-box" *ngIf="staking.error()">{{ staking.error() }}</div>
+
+        <div class="appr-row">
+          <div class="appr-dot" [class.ok]="staking.userData()?.approved"></div>
+          <span class="appr-txt">
+            {{ staking.userData()?.approved
+                ? 'Permission granted — ready to stake'
+                : 'Permission not set — approval required' }}
+          </span>
+          <span class="appr-amt" *ngIf="staking.userData()">
+            {{ staking.userData()!.allowanceFmt }}
+          </span>
+        </div>
+
+        <div class="amount-display">
+          <div class="amount-label">Fixed staking amount</div>
+          <div class="amount-row">
+            <span class="amount-num">{{ staking.params()?.amountFmt ?? '—' }}</span>
+            <span class="amount-unit">{{ staking.params()?.sym ?? 'STK' }}</span>
+          </div>
+        </div>
+
+        <p class="notice">
+          This protocol only accepts the fixed configured amount. Any other amount will be rejected by the smart contract.
+        </p>
+
+        <button class="btn-outline"
+                [disabled]="!wallet.connected() || staking.loading() === 'approve'"
+                (click)="approve()">
+          <span class="spinner" *ngIf="staking.loading() === 'approve'"></span>
+          {{ staking.loading() === 'approve' ? 'Approving...' : 'Approve token spending' }}
+        </button>
+
+        <button class="btn-primary"
+                [disabled]="!wallet.connected() || !staking.userData()?.approved || staking.loading() === 'stake'"
+                (click)="stake()">
+          <span class="spinner" *ngIf="staking.loading() === 'stake'"></span>
+          {{ staking.loading() === 'stake' ? 'Staking...' : 'Stake tokens' }}
+        </button>
+
+        <hr class="rule">
+
+        <button class="btn-danger"
+                [disabled]="!wallet.connected() || !staking.userData() || staking.loading() === 'withdraw'"
+                (click)="withdraw()">
+          <span class="spinner" *ngIf="staking.loading() === 'withdraw'"></span>
+          {{ staking.loading() === 'withdraw' ? 'Withdrawing...' : 'Withdraw tokens' }}
+        </button>
+
+        <hr class="rule">
+
+        <div class="panel-label" style="margin-bottom:12px">Contract Info</div>
+        <div class="dr"><span class="dk">Staking Contract</span><span class="dv">{{ short(staking.stakingAddr) }}</span></div>
+        <div class="dr"><span class="dk">Token Contract</span><span class="dv">{{ short(staking.tokenAddr) }}</span></div>
+        <div class="dr"><span class="dk">Staked Balance</span><span class="dv blue">{{ staking.userData()?.stakedFmt ?? '0' }} {{ staking.params()?.sym }}</span></div>
+        <div class="dr"><span class="dk">Stake Timestamp</span><span class="dv">{{ staking.userData()?.timestampDate ?? '—' }}</span></div>
+        <div class="dr"><span class="dk">Time until claim</span><span class="dv green">{{ staking.userData()?.timeLeft ?? '—' }}</span></div>
+        <div class="dr"><span class="dk">Wallet Balance</span><span class="dv blue">{{ staking.userData()?.tokenBalFmt ?? '—' }} {{ staking.params()?.sym }}</span></div>
+      </div>
+
+      <!-- ── RIGHT STACK ── -->
+      <div class="right-stack">
+
+        <div class="panel">
+          <div class="panel-label">Your Position</div>
+          <div class="pos-row">
+            <div class="pos-cell">
+              <div class="pc-label">Staked</div>
+              <div class="pc-val">
+                {{ staking.userData()?.stakedFmt ?? '0' }}
+                <small>{{ staking.params()?.sym ?? 'STK' }}</small>
+              </div>
+            </div>
+            <div class="pos-cell">
+              <div class="pc-label">Reward / Period</div>
+              <div class="pc-val">
+                {{ staking.params()?.rewardFmt ?? '0' }}
+                <small>ETH</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog">
+            <div class="prog-head">
+              <span class="prog-label">Period progress</span>
+              <span class="prog-pct">{{ staking.userData()?.periodPct ?? 0 }}%</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" [style.width.%]="staking.userData()?.periodPct ?? 0"></div>
+            </div>
+          </div>
+
+          <div class="addr-row" (click)="copyAddr()" *ngIf="wallet.connected()">
+            <span class="addr-txt">{{ wallet.address() }}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+          </div>
+          <div class="addr-row no-wallet" *ngIf="!wallet.connected()">
+            <span class="addr-txt muted">Not connected</span>
+          </div>
+
+          <button class="btn-outline" (click)="refresh()">Refresh data</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" *ngIf="toast">
+    <div class="toast" [class.err]="toastErr">{{ toast }}</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- REWARDS SECTION                               -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="rewards-section" id="rewards">
+  <div class="dash-inner">
+
+    <div class="dash-header">
+      <div>
+        <div class="section-tag accent">Rewards</div>
+        <h2 class="dash-title">Your Earnings</h2>
+        <p class="dash-sub">Track and claim your accumulated ETH rewards</p>
+      </div>
+    </div>
+
+    <div class="rewards-grid">
+
+      <!-- Rewards summary card -->
+      <div class="panel reward-panel">
+        <div class="panel-label">Accumulated Rewards</div>
+
+        <div class="reward-hero">
+          <div class="reward-amount">
+            <span class="reward-num">{{ staking.params()?.rewardFmt ?? '—' }}</span>
+            <span class="reward-unit">ETH</span>
+          </div>
+          <div class="reward-usd">per period · {{ staking.params()?.periodHours ?? '—' }}h lock</div>
+        </div>
+
+        <div class="reward-status" [class.claimable]="staking.userData()?.claimable">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14" *ngIf="!staking.userData()?.claimable"/>
+            <polyline points="9 11 12 14 22 4" *ngIf="staking.userData()?.claimable"/>
+          </svg>
+          <span *ngIf="!staking.userData()?.claimable">
+            {{ staking.userData()?.timeLeft ? 'Available in ' + staking.userData()!.timeLeft : 'Connect wallet to check' }}
+          </span>
+          <span *ngIf="staking.userData()?.claimable">Ready to claim!</span>
+        </div>
+
+        <button class="btn-claim"
+                [disabled]="!staking.userData()?.claimable || staking.loading() === 'claim'"
+                (click)="claim()">
+          <span class="spinner" *ngIf="staking.loading() === 'claim'"></span>
+          <svg *ngIf="staking.loading() !== 'claim'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/>
+          </svg>
+          {{ staking.loading() === 'claim' ? 'Claiming...' : 'Claim ETH Reward' }}
+        </button>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="reward-stats">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </div>
+          <div class="stat-label">APY Estimate</div>
+          <div class="stat-value">~18.7%</div>
+          <div class="stat-sub">Based on current period</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+            </svg>
+          </div>
+          <div class="stat-label">Lock Period</div>
+          <div class="stat-value">{{ staking.params()?.periodHours ?? '—' }}h</div>
+          <div class="stat-sub">Per staking cycle</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div class="stat-label">Period Progress</div>
+          <div class="stat-value">{{ staking.userData()?.periodPct ?? 0 }}%</div>
+          <div class="stat-sub">Current cycle</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="6"/><path d="M8 14v6m4-6v6m4-6v6"/>
+            </svg>
+          </div>
+          <div class="stat-label">Reward per Period</div>
+          <div class="stat-value">{{ staking.params()?.rewardFmt ?? '—' }}</div>
+          <div class="stat-sub">ETH direct transfer</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- HOW IT WORKS SECTION                          -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="how-section" id="how-it-works">
+  <div class="dash-inner">
+
+    <div class="section-header-center">
+      <div class="section-tag">Process</div>
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-desc">A simple, transparent staking protocol built on Ethereum smart contracts. No intermediaries, no custody risk — your tokens, your rules.</p>
+    </div>
+
+    <!-- Main steps -->
+    <div class="steps-grid">
+
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon-wrap blue">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Connect Your Wallet</h3>
+        <p class="step-desc">Use MetaMask or any EIP-1193 compatible wallet. Your private keys never leave your device — we only request a read connection to detect your address and balances.</p>
+        <div class="step-detail">
+          <div class="step-detail-item"><span class="dot blue"></span> MetaMask supported</div>
+          <div class="step-detail-item"><span class="dot blue"></span> WalletConnect compatible</div>
+          <div class="step-detail-item"><span class="dot blue"></span> No sign-up required</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon-wrap green">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Approve Token Spending</h3>
+        <p class="step-desc">Before staking, you grant the smart contract permission to transfer your tokens. This is a standard ERC-20 approval — you set the exact amount the contract is allowed to move.</p>
+        <div class="step-detail">
+          <div class="step-detail-item"><span class="dot green"></span> One-time approval</div>
+          <div class="step-detail-item"><span class="dot green"></span> Exact amount authorized</div>
+          <div class="step-detail-item"><span class="dot green"></span> Revocable anytime</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon-wrap purple">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Stake the Fixed Amount</h3>
+        <p class="step-desc">Deposit the exact configured amount into the vault. The smart contract enforces this strictly — no partial deposits are accepted. Your tokens are locked in a non-custodial vault.</p>
+        <div class="step-detail">
+          <div class="step-detail-item"><span class="dot purple"></span> Fixed amount enforced on-chain</div>
+          <div class="step-detail-item"><span class="dot purple"></span> Non-custodial vault</div>
+          <div class="step-detail-item"><span class="dot purple"></span> Immutable lock logic</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon-wrap gold">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Wait for the Lock Period</h3>
+        <p class="step-desc">Your stake is locked for a fixed period defined in the contract. During this time, rewards accrue. The progress bar in your dashboard shows exactly how far along you are in the cycle.</p>
+        <div class="step-detail">
+          <div class="step-detail-item"><span class="dot gold"></span> Real-time progress tracking</div>
+          <div class="step-detail-item"><span class="dot gold"></span> Transparent on-chain timer</div>
+          <div class="step-detail-item"><span class="dot gold"></span> No hidden fees during lock</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">05</div>
+        <div class="step-icon-wrap green">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Claim Your ETH Reward</h3>
+        <p class="step-desc">Once the lock period ends, claim your ETH reward with a single transaction. The reward is sent directly to your wallet — no wrapping, no extra steps, no waiting for batches.</p>
+        <div class="step-detail">
+          <div class="step-detail-item"><span class="dot green"></span> Direct ETH transfer</div>
+          <div class="step-detail-item"><span class="dot green"></span> No withdrawal queue</div>
+          <div class="step-detail-item"><span class="dot green"></span> Tokens stay in vault until withdrawn</div>
+        </div>
+      </div>
+
+      <div class="step-card highlight-card">
+        <div class="step-num">06</div>
+        <div class="step-icon-wrap blue">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Restake or Withdraw</h3>
+        <p class="step-desc">After claiming, your tokens remain staked and the cycle resets automatically, or you can withdraw them to your wallet at any time. Compounding is as simple as staying staked.</p>
+        <div class="step-detail">
+          <div class="step-detail-item"><span class="dot blue"></span> Auto-cycle on claim</div>
+          <div class="step-detail-item"><span class="dot blue"></span> Withdraw anytime post-lock</div>
+          <div class="step-detail-item"><span class="dot blue"></span> No re-approval needed</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Security note -->
+    <div class="security-banner">
+      <div class="security-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="security-title">Non-custodial & Transparent</div>
+        <div class="security-sub">The smart contract code is open source and verifiable on-chain. No admin key can move your tokens. You can withdraw independently of any frontend.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- FAQ SECTION                                   -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="faq-section" id="faq">
+  <div class="dash-inner">
+
+    <div class="section-header-center">
+      <div class="section-tag">FAQ</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-desc">Everything you need to know about SkyStake staking protocol.</p>
+    </div>
+
+    <div class="faq-list">
+
+      <div class="faq-item" [class.open]="faqOpen===0" (click)="toggleFaq(0)">
+        <div class="faq-q">
+          <span>What is SkyStake and how does it work?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          SkyStake is a non-custodial Ethereum staking protocol. You deposit a fixed amount of tokens into a smart contract vault, wait for the lock period to complete, and receive an ETH reward directly to your wallet. The entire process is governed by immutable on-chain code — no team or admin can interfere with your funds.
+        </div>
+      </div>
+
+      <div class="faq-item" [class.open]="faqOpen===1" (click)="toggleFaq(1)">
+        <div class="faq-q">
+          <span>Is my stake safe? Who controls my tokens?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          Your tokens are held in a smart contract, not by any individual or company. The contract logic is fully on-chain and verifiable. There is no admin key or upgrade mechanism that could move your stake without your action. You can verify the contract address directly on Etherscan at any time.
+        </div>
+      </div>
+
+      <div class="faq-item" [class.open]="faqOpen===2" (click)="toggleFaq(2)">
+        <div class="faq-q">
+          <span>Why is the staking amount fixed?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          The fixed amount simplifies the reward distribution math and ensures fairness. Every staker deposits the same amount and earns the same ETH reward per period. This design prevents whale manipulation and makes the protocol predictable and auditable by anyone.
+        </div>
+      </div>
+
+      <div class="faq-item" [class.open]="faqOpen===3" (click)="toggleFaq(3)">
+        <div class="faq-q">
+          <span>What happens if I don't claim my reward in time?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          Your reward stays available indefinitely after the lock period ends. There is no expiration on claiming — you can claim it a day later or a month later. Your staked tokens also remain safely locked until you explicitly withdraw them.
+        </div>
+      </div>
+
+      <div class="faq-item" [class.open]="faqOpen===4" (click)="toggleFaq(4)">
+        <div class="faq-q">
+          <span>Can I withdraw my tokens before the lock period ends?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          No — the lock period is enforced at the smart contract level. Early withdrawal is not possible during an active staking period. This protects reward integrity and ensures the protocol remains sustainable. Once the period ends, you can withdraw freely.
+        </div>
+      </div>
+
+      <div class="faq-item" [class.open]="faqOpen===5" (click)="toggleFaq(5)">
+        <div class="faq-q">
+          <span>What wallet do I need to use SkyStake?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          SkyStake works with any EIP-1193 compatible wallet — MetaMask is the most common choice. Hardware wallets (Ledger, Trezor) connected via MetaMask are also supported. Make sure your wallet is connected to the correct Ethereum network before interacting with the contract.
+        </div>
+      </div>
+
+      <div class="faq-item" [class.open]="faqOpen===6" (click)="toggleFaq(6)">
+        <div class="faq-q">
+          <span>Are there any fees beyond Ethereum gas?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          No protocol fees are charged beyond standard Ethereum gas costs. The gas fee is paid to Ethereum validators for processing your transaction — SkyStake does not take a cut. The ETH reward you receive is the full amount configured in the contract.
+        </div>
+      </div>
+
+      <div class="faq-item" [class.open]="faqOpen===7" (click)="toggleFaq(7)">
+        <div class="faq-q">
+          <span>What does "approve token spending" mean?</span>
+          <div class="faq-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          ERC-20 tokens require an explicit approval step before any contract can move them. When you click "Approve", you're authorizing the staking contract to transfer the fixed staking amount from your wallet. This is a standard and well-understood Ethereum pattern — you can revoke the approval at any time through tools like Etherscan or Revoke.cash.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
